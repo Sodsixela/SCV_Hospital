@@ -1,0 +1,113 @@
+p 195.0 420.0 {emergency room} 0 n
+p 190.0 515.0 {Fill papers} 0 n
+t 305.0 515.0 {give papers} s 0 w n {} ne
+p 595.0 515.0 {wait doctor} 0 n
+t 695.0 515.0 examination n 0 w n {} ne
+p 815.0 515.0 finished 0 n
+t 305.0 420.0 {check in} s 0 -5 n {} ne
+t 195.0 290.0 leave n 3 3 w {} ne
+p 405.0 515.0 {process papers} 0 n
+t 505.0 515.0 {enter exam room} s 0 w n {} ne
+p 405.0 625.0 nurse 5 n
+p 695.0 590.0 Doctor 5 n
+p 405.0 420.0 patient 0 n
+p 545.0 625.0 {Examining room} 5 n
+t 305.0 340.0 {check in + busy} n 0 -5 s {} ne
+p 405.0 340.0 p26 1 n
+t 500.0 340.0 {free service} n 0 w n {} ne
+t 60.0 420.0 {go to emergency} s 0 w n {} ne
+t 815.0 420.0 {check out} s 0 w n {} ne
+t 1105.0 400.0 {not free anymore} s 0 w n {} ne
+t 1150.0 640.0 {receive room} s 0 w n {} ne
+t 1050.0 400.0 {other service free} n 0 w n {} ne
+p 970.0 385.0 p16 0 n
+t 925.0 265.0 {ok doctor} n 0 w n {} ne
+t 1010.0 265.0 {ask doctor} n 0 w n {} ne
+p 1150.0 335.0 p17 0 n
+t 1115.0 265.0 {ask room} n 0 w n {} ne
+t 1195.0 265.0 {of room} n 0 w n {} ne
+t 975.0 590.0 {receive doctor} sw 0 w n {} ne
+p 1075.0 590.0 available 0 s
+t 770.0 225.0 {other needs doctor} s 0 w n {} ne
+p 610.0 235.0 {can give} 0 s
+t 770.0 160.0 {other needs room} s 0 w n {} ne
+t 1055.0 140.0 {responsable not ok} n 0 w n {} ne
+t 1055.0 55.0 {responsable ok} s 0 w n {} ne
+p 970.0 100.0 {able to give} 0 n
+p 1160.0 100.0 {not able to give} 1 n
+t 775.0 25.0 {not ok anymore} s 0 w n {} ne
+p 980.0 200.0 p0 3 n
+p 1205.0 180.0 p1 3 n
+p 55.0 200.0 p2 20 n
+p 1070.0 325.0 p3 5 n
+e {not free anymore} p3 1 n
+e p3 {other service free} 1 n
+e {of room} p1 1 n
+e p1 {ask room} 1 n
+e {check out} 0.4296344429 186.9786084 p2 0.003825103316 208.0600875 1 n
+e leave p2 1 n
+e p2 {go to emergency} 1 n
+e {receive room} 0.1374572389 144.692778 p1 0.9016192909 165.6532523 1 n
+e {receive doctor} 0.2670976899 102.5914226 p0 0.5341889328 112.5877436 1 n
+e {ok doctor} p0 1 n
+e p0 {ask doctor} 1 n
+e {go to emergency} {emergency room} 1 n
+e {emergency room} {check in} 1 n
+e {check in} patient 1 n
+e {check in} {Fill papers} 1 n
+e {Fill papers} {give papers} 1 n
+e nurse {give papers} 1 n
+e {give papers} {process papers} 1 n
+e {process papers} {enter exam room} 1 n
+e {Examining room} {enter exam room} 1 n
+e {enter exam room} {wait doctor} 1 n
+e Doctor examination 1 n
+e {wait doctor} examination 1 n
+e examination finished 1 n
+e finished 0.2545460474 35.0142828 {check out} 0.7422424934 41.0487515 1 n
+e {check out} 0.9021733529 104.0432602 Doctor 0.0365201177 140.6875972 1 n
+e patient {check out} 1 n
+e {enter exam room} nurse 1 n
+e {check out} 0.973474628 108.5034562 {Examining room} 0.99335394 359.3132338 1 n
+e {emergency room} leave 1 n
+e {other service free} available 1 n
+e {ask doctor} p16 1 n
+e {ask room} p17 1 n
+e p16 {receive doctor} 1 n
+e p17 {receive room} 1 n
+e available {receive doctor} 1 n
+e available {receive room} 1 n
+e available {not free anymore} 1 n
+e {receive doctor} Doctor 1 n
+e {receive room} {Examining room} 1 n
+e {receive doctor} available 1 n
+e {receive room} available 1 n
+e {free service} {can give} 1 n
+e {Examining room} 0.9597506647 827.314927 {other needs room} 0.005833068104 600.4031979 1 n
+e Doctor 0.007440420153 171.1870322 {other needs doctor} 0.8829720709 268.3300204 1 n
+e patient {free service} ?-1 n
+e {can give} {other needs room} 1 n
+e {can give} {other needs doctor} 1 n
+e p16 {ok doctor} 1 n
+e p17 {of room} 1 n
+e {responsable ok} {able to give} 1 n
+e {able to give} {responsable not ok} 1 n
+e {able to give} 0.4901678912 194.3707797 {free service} 0.2427706605 176.1817244 ?1 n
+e {responsable not ok} {not able to give} 1 n
+e {not able to give} {responsable ok} 1 n
+e p26 {free service} 1 n
+e {other needs room} {can give} 1 n
+e {other needs doctor} {can give} 1 n
+e {can give} 0.2417396361 77.1038261 {not ok anymore} 0.5101144035 110.2225022 1 n
+e {not ok anymore} 0.5037886876 42.01190308 {not able to give} 0.2446372571 89.05054744 1 n
+e {emergency room} {check in + busy} 1 n
+e {check in + busy} patient 1 n
+e {can give} 0.7568046184 187.1710448 {check in} 0.9490849115 171.7119681 ?-1 n
+e {can give} 0.5575251044 87.66413178 {check in + busy} 0.05068292924 95.81753493 1 n
+e {check in + busy} p26 1 n
+e {check in + busy} {Fill papers} 1 n
+e {not ok anymore} 0.5153972002 238.1134184 p26 0.2455801659 108.0416586 1 n
+e {able to give} {not ok anymore} 1 n
+h hospital
+
+

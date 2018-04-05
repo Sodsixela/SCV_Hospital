@@ -1,0 +1,61 @@
+<diagram program="umletino" version="14.2"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>400</x><y>269</y><w>210</w><h>260</h></coordinates><panel_attributes>&lt;&lt;Stereotype&gt;&gt;
+Package::Service
+--
+-id: int
++give : int
++need : int
++available : boolean
+--
+- sendDoctor()
+- sendRoom()
+- checkIn(): boolean
+-okToGive()
+-stopToGive()
+- askDoctor()
+- askRoom()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>140</x><y>29</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Stereotype&gt;&gt;
+Package::Room
+{Some Properties}
+--
+-id: int
++patient : int
+--
+-waitDoctor()
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>140</x><y>269</y><w>210</w><h>120</h></coordinates><panel_attributes>&lt;&lt;Stereotype&gt;&gt;
+Package::Doctor
+{Some Properties}
+--
+-id: int
+--
+-examine()
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>400</x><y>29</y><w>210</w><h>140</h></coordinates><panel_attributes>&lt;&lt;Stereotype&gt;&gt;
+Package::Nurse
+{Some Properties}
+--
+-id: int
+--
++process_paper()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>660</x><y>269</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Stereotype&gt;&gt;
+Package::Patient
+{Some Properties}
+--
+-id: int
++emergency : boolean
++registered : boolean
+--
+-fillPaper()
+-leave()
+-goToEmergency()
+-Emergency()
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>600</x><y>329</y><w>80</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=0..n
+m2=1</panel_attributes><additional_attributes>10;10;60;10</additional_attributes></element><element><id>Relation</id><coordinates><x>490</x><y>519</y><w>50</w><h>100</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=0..n
+m2=1</panel_attributes><additional_attributes>10;80;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>340</x><y>209</y><w>90</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=0..n
+m2=1</panel_attributes><additional_attributes>60;60;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>340</x><y>319</y><w>80</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=0..n
+m2=1</panel_attributes><additional_attributes>60;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>400</x><y>599</y><w>210</w><h>70</h></coordinates><panel_attributes>&lt;&lt;Stereotype&gt;&gt;
+Package::Hospital
+--
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>500</x><y>159</y><w>50</w><h>130</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=0..n
+m2=1</panel_attributes><additional_attributes>10;110;10;10</additional_attributes></element></diagram>

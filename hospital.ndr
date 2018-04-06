@@ -1,113 +1,67 @@
-p 195.0 420.0 {emergency room} 0 n
-p 190.0 515.0 {Fill papers} 0 n
-t 305.0 515.0 {give papers} s 0 w n {} ne
-p 595.0 515.0 {wait doctor} 0 n
-t 695.0 515.0 examination n 0 w n {} ne
-p 815.0 515.0 finished 0 n
-t 305.0 420.0 {check in} s 0 -5 n {} ne
-t 195.0 290.0 leave n 3 3 w {} ne
-p 405.0 515.0 {process papers} 0 n
-t 505.0 515.0 {enter exam room} s 0 w n {} ne
-p 405.0 625.0 nurse 5 n
-p 695.0 590.0 Doctor 5 n
-p 405.0 420.0 patient 0 n
-p 545.0 625.0 {Examining room} 5 n
-t 305.0 340.0 {check in + busy} n 0 -5 s {} ne
-p 405.0 340.0 p26 1 n
-t 500.0 340.0 {free service} n 0 w n {} ne
-t 60.0 420.0 {go to emergency} s 0 w n {} ne
-t 815.0 420.0 {check out} s 0 w n {} ne
-t 1105.0 400.0 {not free anymore} s 0 w n {} ne
-t 1150.0 640.0 {receive room} s 0 w n {} ne
-t 1050.0 400.0 {other service free} n 0 w n {} ne
-p 970.0 385.0 p16 0 n
-t 925.0 265.0 {ok doctor} n 0 w n {} ne
-t 1010.0 265.0 {ask doctor} n 0 w n {} ne
-p 1150.0 335.0 p17 0 n
-t 1115.0 265.0 {ask room} n 0 w n {} ne
-t 1195.0 265.0 {of room} n 0 w n {} ne
-t 975.0 590.0 {receive doctor} sw 0 w n {} ne
-p 1075.0 590.0 available 0 s
-t 770.0 225.0 {other needs doctor} s 0 w n {} ne
-p 610.0 235.0 {can give} 0 s
-t 770.0 160.0 {other needs room} s 0 w n {} ne
-t 1055.0 140.0 {responsable not ok} n 0 w n {} ne
-t 1055.0 55.0 {responsable ok} s 0 w n {} ne
-p 970.0 100.0 {able to give} 0 n
-p 1160.0 100.0 {not able to give} 1 n
-t 775.0 25.0 {not ok anymore} s 0 w n {} ne
-p 980.0 200.0 p0 3 n
-p 1205.0 180.0 p1 3 n
-p 55.0 200.0 p2 20 n
-p 1070.0 325.0 p3 5 n
-e {not free anymore} p3 1 n
-e p3 {other service free} 1 n
-e {of room} p1 1 n
-e p1 {ask room} 1 n
-e {check out} 0.4296344429 186.9786084 p2 0.003825103316 208.0600875 1 n
-e leave p2 1 n
-e p2 {go to emergency} 1 n
-e {receive room} 0.1374572389 144.692778 p1 0.9016192909 165.6532523 1 n
-e {receive doctor} 0.2670976899 102.5914226 p0 0.5341889328 112.5877436 1 n
-e {ok doctor} p0 1 n
-e p0 {ask doctor} 1 n
-e {go to emergency} {emergency room} 1 n
-e {emergency room} {check in} 1 n
-e {check in} patient 1 n
-e {check in} {Fill papers} 1 n
-e {Fill papers} {give papers} 1 n
-e nurse {give papers} 1 n
-e {give papers} {process papers} 1 n
-e {process papers} {enter exam room} 1 n
-e {Examining room} {enter exam room} 1 n
-e {enter exam room} {wait doctor} 1 n
-e Doctor examination 1 n
-e {wait doctor} examination 1 n
+p 110.0 330.0 emergency_room 0 n
+t 220.0 425.0 give_papers s 0 w n {} ne
+p 510.0 425.0 wait_doctor 0 n
+t 610.0 425.0 examination n 0 w n {} ne
+p 730.0 425.0 finished 0 n
+t 110.0 200.0 leave n 3 3 e {} ne
+p 320.0 425.0 process_papers 0 n
+t 420.0 425.0 enter_exam_room s 0 w n {} ne
+p 320.0 535.0 nurse 3 n
+p 320.0 330.0 patient 0 n
+t 730.0 330.0 check_out s 0 w n {} ne
+p 105.0 425.0 Fill_papers 0 n
+t 60.0 330.0 go_to_emergency s 0 w n {} ne
+t 80.0 640.0 emergency s 0 w n {} ne
+p 60.0 155.0 people 6 n
+p 515.0 595.0 Examining_room 3 n
+t 510.0 165.0 receive_doctor sw 0 w n {} ne
+p 610.0 165.0 Doctor 3 n
+t 850.0 595.0 receive_room s 0 w n {} ne
+p 850.0 420.0 Other_room 3 n
+t 850.0 240.0 other_need_room s 0 w n {} ne
+t 220.0 330.0 check_in s 0 -5 n {} ne
+p 510.0 90.0 Other_doctor 3 n
+t 615.0 90.0 other_need_doctor ne 0 w n {} ne
+e Doctor other_need_doctor 1 n
+e Examining_room 0.9568774695 373.6308338 other_need_room 0.8269958379 199.9449924 1 n
+e receive_doctor 0.05645315786 28.7923601 Doctor 0.4412187227 33.24154028 1 n
+e emergency 0.02568364652 174.2641673 wait_doctor 0.6428429734 107.4476617 1 n
+e Examining_room 0.5607938669 126.0872714 emergency 0.989405349 120.266371 1 n
+e emergency patient 1 n
+e Other_room receive_room 1 n
+e other_need_room 0.7481053878 84.00595217 Other_room 0.2522103432 72.00694411 1 n
+e Other_doctor receive_doctor 1 n
+e other_need_doctor Other_doctor 1 n
+e people 0.7088153346 105.5130324 emergency 0.3096577527 131.1030129 1 n
+e receive_room 0.5305653912 73.34848328 Examining_room 0.9737157716 121.6552506 1 n
+e emergency_room leave 1 n
+e check_out 0.9605115181 77.36924454 Examining_room 0.01777487952 215.3415891 1 n
+e enter_exam_room nurse 1 n
+e patient check_out 1 n
+e check_out 0.339907328 84.05950273 Doctor 0.8545173157 60.6052803 1 n
+e finished 0.2545460474 35.0142828 check_out 0.7422424934 41.0487515 1 n
 e examination finished 1 n
-e finished 0.2545460474 35.0142828 {check out} 0.7422424934 41.0487515 1 n
-e {check out} 0.9021733529 104.0432602 Doctor 0.0365201177 140.6875972 1 n
-e patient {check out} 1 n
-e {enter exam room} nurse 1 n
-e {check out} 0.973474628 108.5034562 {Examining room} 0.99335394 359.3132338 1 n
-e {emergency room} leave 1 n
-e {other service free} available 1 n
-e {ask doctor} p16 1 n
-e {ask room} p17 1 n
-e p16 {receive doctor} 1 n
-e p17 {receive room} 1 n
-e available {receive doctor} 1 n
-e available {receive room} 1 n
-e available {not free anymore} 1 n
-e {receive doctor} Doctor 1 n
-e {receive room} {Examining room} 1 n
-e {receive doctor} available 1 n
-e {receive room} available 1 n
-e {free service} {can give} 1 n
-e {Examining room} 0.9597506647 827.314927 {other needs room} 0.005833068104 600.4031979 1 n
-e Doctor 0.007440420153 171.1870322 {other needs doctor} 0.8829720709 268.3300204 1 n
-e patient {free service} ?-1 n
-e {can give} {other needs room} 1 n
-e {can give} {other needs doctor} 1 n
-e p16 {ok doctor} 1 n
-e p17 {of room} 1 n
-e {responsable ok} {able to give} 1 n
-e {able to give} {responsable not ok} 1 n
-e {able to give} 0.4901678912 194.3707797 {free service} 0.2427706605 176.1817244 ?1 n
-e {responsable not ok} {not able to give} 1 n
-e {not able to give} {responsable ok} 1 n
-e p26 {free service} 1 n
-e {other needs room} {can give} 1 n
-e {other needs doctor} {can give} 1 n
-e {can give} 0.2417396361 77.1038261 {not ok anymore} 0.5101144035 110.2225022 1 n
-e {not ok anymore} 0.5037886876 42.01190308 {not able to give} 0.2446372571 89.05054744 1 n
-e {emergency room} {check in + busy} 1 n
-e {check in + busy} patient 1 n
-e {can give} 0.7568046184 187.1710448 {check in} 0.9490849115 171.7119681 ?-1 n
-e {can give} 0.5575251044 87.66413178 {check in + busy} 0.05068292924 95.81753493 1 n
-e {check in + busy} p26 1 n
-e {check in + busy} {Fill papers} 1 n
-e {not ok anymore} 0.5153972002 238.1134184 p26 0.2455801659 108.0416586 1 n
-e {able to give} {not ok anymore} 1 n
-h hospital
+e wait_doctor examination 1 n
+e Doctor examination 1 n
+e enter_exam_room wait_doctor 1 n
+e Examining_room enter_exam_room 1 n
+e process_papers enter_exam_room 1 n
+e give_papers process_papers 1 n
+e nurse give_papers 1 n
+e Fill_papers give_papers 1 n
+e check_in Fill_papers 1 n
+e check_in patient 1 n
+e emergency_room check_in 1 n
+e go_to_emergency emergency_room 1 n
+e people go_to_emergency 1 n
+e leave people 1 n
+e check_out 0.4296344429 186.9786084 people 0.003825103316 208.0600875 1 n
+e patient 0.2458490733 230.0782476 other_need_doctor 0.3760402136 108.1896483 ?-1 n
+e patient other_need_room ?-1 n
+e Doctor receive_doctor ?-1 n
+e Examining_room receive_room ?-1 n
+e process_papers receive_room ?1 n
+e wait_doctor receive_doctor ?1 n
+h hospitalbis
 
 

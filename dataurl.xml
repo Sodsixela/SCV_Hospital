@@ -11,8 +11,8 @@ Package::Service
 - checkIn(): boolean
 -okToGive()
 -stopToGive()
-- askDoctor()
-- askRoom()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>140</x><y>29</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Stereotype&gt;&gt;
+- askDoctor(booelan)
+- askRoom(boolean)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>140</x><y>29</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Stereotype&gt;&gt;
 Package::Room
 {Some Properties}
 --

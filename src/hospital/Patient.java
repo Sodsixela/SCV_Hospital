@@ -5,9 +5,9 @@ public class Patient implements Runnable{
 	private boolean emergency;
 	private Service service;
 	private long start;
-	public Patient(boolean e, String service)
+	public Patient(boolean e, Service service)
 	{
-		this.service= Hospital.getService(service);
+		this.service= service;
 		this.service.setPatient((this.service.getPatient())+1);
 		this.emergency=e;
 		this.start = System.nanoTime();
@@ -30,34 +30,16 @@ public class Patient implements Runnable{
 		service.setPatient(service.getPatient()-1);
 	}
 	
-	private void goToEmergency()
+	public boolean goToEmergency()
 	{
-		boolean enter = service.checkIn();
-		if(enter)
-		{
-			System.out.println("check in ok, "+ service.getName());
-			fillPaper();
-			try {
-				service.nurse.acquire();
-				Nurse nurse= new Nurse(service);
-				nurse.process_paper();
-				Room room= new Room(service);
-				room.waitDoctor();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
-		leave();
+		return service.checkIn();
+		
 	}
 	
-	private void emergency()
+	public void emergency()
 	{
 		try {
 			service.room.acquire();
-			Room room= new Room(service);
-			room.waitDoctor();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,6 +48,7 @@ public class Patient implements Runnable{
 	@Override
 	public void run() {
 		System.out.println("A patient is comming in "+service.getName());
+		boolean accepted=true;
 		if(emergency==true)
 		{
 			System.out.println("emergency");
@@ -73,9 +56,39 @@ public class Patient implements Runnable{
 		}
 		else 
 		{
-			goToEmergency();
+			accepted=goToEmergency();
+			if(accepted==true)
+			{
+				System.out.println("check in ok, "+ service.getName());
+				fillPaper();
+				try {
+					service.nurse.acquire();
+					Nurse nurse= new Nurse(service);
+					nurse.process_paper();
+					
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
 		}
+		if(accepted==true)
+		{
+			Room room= new Room(service);
+			room.waitDoctor();
+			
+			Doctor doctor=new Doctor(service);
+			System.out.println("the doctor is here,"+service.getName());
+			doctor.examine();
+		}
+		leave();
 		long time = System.nanoTime() - start;
 		System.out.println(time*0.000000001+ " ms");
 	}
+
+	public Service getService() {
+		return service;
+	}
+	
 }

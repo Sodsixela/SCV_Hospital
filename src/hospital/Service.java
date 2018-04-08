@@ -14,16 +14,12 @@ public class Service{
 	public Semaphore nurse;
 	public Semaphore room;
 	public Semaphore reception;
+	private Hospital hospital;
 	
-	public Service(String name,int doctor, int nurse, int room)
+	public Service(String name,int doctor, int nurse, int room,Hospital hospital)
 	{
-		Hospital.openService.release();
-		try {
-			Hospital.openService.acquire();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.hospital=hospital;
+		
 		this.name=name;
 		//this.available=true;
 		this.doctor=new Semaphore(doctor, true);
@@ -93,7 +89,7 @@ public class Service{
 		if(patient==0) 
 		{
 			give=true;
-			Hospital.openService.release();
+			hospital.getOpenService().release();
 		}
 		else give=false;
 	}
@@ -103,7 +99,7 @@ public class Service{
 		give=false;
 		System.out.println(this.name+" stop to give");
 		try {
-			Hospital.openService.acquire();
+			hospital.getOpenService().acquire();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -150,7 +146,7 @@ public class Service{
 				}
 			}
 			else need=3;
-			Thread t = new askThread(this,1);
+			Thread t = new askThread(this,2);
 			t.start();
 			
 		}
@@ -161,6 +157,8 @@ public class Service{
 			else need=0;
 		}
 	}
+	
+	
 	private class askThread extends Thread{
 		private Service service;
 		private int resource;
@@ -175,12 +173,12 @@ public class Service{
 			try {
 				do
 				{
-					get=Hospital.openService.tryAcquire(1,1000, TimeUnit.MILLISECONDS);
+					get=hospital.getOpenService().tryAcquire(1,1000, TimeUnit.MILLISECONDS);
 					if(get)
 					{
 						if(resource==1)
 						{
-							Service giver=Hospital.getDoctor();
+							Service giver=hospital.getDoctor();
 							if(giver!=null)
 							{
 								System.out.println(giver.getName() +" gives a doctor to "+ service.name);
@@ -198,7 +196,7 @@ public class Service{
 						}
 						else if(resource==2)
 						{
-							Service giver=Hospital.getRoom();
+							Service giver=hospital.getRoom();
 							if(giver!=null)
 							{
 								System.out.println(giver.getName() +" gives a room to "+ service.name);
@@ -214,6 +212,7 @@ public class Service{
 							}
 							else get=false;
 						}
+						hospital.getOpenService().release();
 					}
 				}while(((need==1 && resource==1) || (need==2 && resource==2) || (need==3)) && !get);
 				

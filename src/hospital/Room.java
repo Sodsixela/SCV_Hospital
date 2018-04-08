@@ -14,9 +14,6 @@ public class Room {
 			
 		try {
 			service.doctor.acquire();
-			Doctor doctor=new Doctor(service);
-			System.out.println("the doctor is here,"+service.getName());
-			doctor.examine();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

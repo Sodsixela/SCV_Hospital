@@ -4,15 +4,17 @@ import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 
 public class Hospital {
-	private static ArrayList<Service> services;
-	public static Semaphore openService;
+	private ArrayList<Service> services;
+	private  Semaphore openService;
 	public Hospital()
 	{
 		services= new ArrayList<>();
 		openService= new Semaphore(0,true);
-		services.add(new Service("Cardiology",5,5,5));
-		services.add(new Service("Neurology",3,4,4));
-		services.add(new Service("Rheumatology",2,3,2));
+		//services.add(new Service("Cardiology",5,5,5));
+		/*addService(new Service("Cardiology",5,5,5));
+		addService(new Service("Neurology",3,4,4));
+		addService(new Service("Rheumatology",2,3,2));
+		*/
 		
 		/*System.out.println(openService.availablePermits());
 		openService.release();
@@ -24,23 +26,27 @@ public class Hospital {
 			e.printStackTrace();
 		}
 		System.out.println(openService.availablePermits());*/
-		new Thread(new Patient(false,"Cardiology")).start();
-		
-		services.get(0).askDoctor(true);
-		
 		//new Thread(new Patient(false,"Cardiology")).start();
-		//new Thread(new Patient(false,"Cardiology")).start();
-		new Thread(new Patient(false,"Neurology")).start();
-		Thread.currentThread();
+		
+		//services.get(0).askDoctor(true);
+		
+		/*new Thread(new Patient(false,getService("Cardiology"))).start();
+		/*new Thread(new Patient(false,services.get(0))).start();
+		new Thread(new Patient(false,services.get(0))).start();
+		new Thread(new Patient(false,services.get(0))).start();
+		new Thread(new Patient(true,services.get(0))).start();
+		new Thread(new Patient(false,services.get(0))).start();
+		new Thread(new Patient(false,services.get(1))).start();*/
+		/*Thread.currentThread();
 		try {
 			Thread.sleep(15000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		services.get(1).okToGive();
+		services.get(1).okToGive();*/
 		//while(true);
 	}
-	public static Service getService(String nameService) {
+	public Service getService(String nameService) {
 		for(Service service: services)
 		{
 			if(service.getName().equals(nameService))
@@ -49,7 +55,7 @@ public class Hospital {
 		return null;
 	}
 	
-	public static Service getDoctor() {
+	public Service getDoctor() {
 		for(Service service: services)
 		{
 			if(service.isGive()/* && !service.getName().equals(nameService) we don't need it, normally*/)
@@ -59,7 +65,7 @@ public class Hospital {
 		return null;
 	}
 	
-	public static Service getRoom() {
+	public Service getRoom() {
 		for(Service service: services)
 		{
 			if(service.isGive() /*&& !service.getName().equals(nameService)*/)
@@ -67,6 +73,20 @@ public class Hospital {
 					return service;
 		}
 		return null;
+	}
+	
+	public void addService(Service service)
+	{
+		services.add(service);
+	}
+	public ArrayList<Service> getServices() {
+		return services;
+	}
+	public void setServices(ArrayList<Service> services) {
+		this.services = services;
+	}
+	public Semaphore getOpenService() {
+		return openService;
 	}
 	
 }

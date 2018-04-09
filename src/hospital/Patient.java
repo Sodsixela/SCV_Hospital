@@ -8,7 +8,6 @@ public class Patient implements Runnable{
 	public Patient(boolean e, Service service)
 	{
 		this.service= service;
-		this.service.setPatient((this.service.getPatient())+1);
 		this.emergency=e;
 		this.start = System.nanoTime();
 	}
@@ -24,20 +23,26 @@ public class Patient implements Runnable{
 		}
 		
 	}
-	public void leave()
+	public void leave(boolean accepted)
 	{
 		System.out.println("The patient leave "+service.getName());
-		service.setPatient(service.getPatient()-1);
+		if(accepted)
+			service.setPatient(service.getPatient()-1);
 	}
 	
 	public boolean goToEmergency()
 	{
-		return service.checkIn();
+		boolean test =service.checkIn();
+		if(test)
+			this.service.setPatient((this.service.getPatient())+1);
+		return test;
 		
 	}
 	
 	public void emergency()
 	{
+
+		this.service.setPatient((this.service.getPatient())+1);
 		try {
 			service.room.acquire();
 		} catch (InterruptedException e) {
@@ -82,7 +87,7 @@ public class Patient implements Runnable{
 			System.out.println("the doctor is here,"+service.getName());
 			doctor.examine();
 		}
-		leave();
+		leave(accepted);
 		long time = System.nanoTime() - start;
 		System.out.println(time*0.000000001+ " ms");
 	}

@@ -45,12 +45,13 @@ public class JUnitTest {
 		int oldnbPatient=hospital.getService("Cardiology").getPatient();
 		/*we take 1 patient in the normal way*/
 		Patient p=new Patient(false,hospital.getService("Cardiology"));
+		System.out.println("A patient is comming in Cardiology");
+		/*the patient can come after the checkIn if it is ok, then  True*/
+		Assert.assertTrue(p.goToEmergency());
 		/*now there is 1 patient*/
 		Assert.assertEquals(oldnbPatient+1,hospital.getService("Cardiology").getPatient() );
 		
-		System.out.println("A patient is comming in Cardiology");
-		/*true if check in ok*/
-		Assert.assertTrue(p.goToEmergency());
+		
 		
 		p.fillPaper();
 		
@@ -82,7 +83,7 @@ public class JUnitTest {
 		Assert.assertEquals(5,hospital.getServices().get(0).doctor.availablePermits() );
 		Assert.assertEquals(5,hospital.getServices().get(0).room.availablePermits() );
 		
-		p.leave();
+		p.leave(true);
 		/*the patient is not anymore in the hospital then there is 0 patient*/
 		Assert.assertEquals(oldnbPatient,hospital.getService("Cardiology").getPatient() );
 	}
@@ -111,14 +112,15 @@ public class JUnitTest {
 		r= new Room(hospital.getServices().get(1));
 		d=new Doctor(hospital.getServices().get(1));
 		
-		/*There is one patient in more in Neurology */
-		Assert.assertEquals(oldnbPatient+1,hospital.getService("Neurology").getPatient() );
+		
 		
 		System.out.println("A patient is comming in Neurology in emergency");
 		
 		/*At least one room is free*/
 		Assert.assertNotEquals(0,hospital.getServices().get(1).room.availablePermits() );
 		p.emergency();
+		/*There is one patient in more in Neurology */
+		Assert.assertEquals(oldnbPatient+1,hospital.getService("Neurology").getPatient() );
 		/*one of the 4 room is now used*/
 		Assert.assertEquals(3,hospital.getServices().get(1).room.availablePermits() );
 		/*at least one doctor is free*/
@@ -132,7 +134,7 @@ public class JUnitTest {
 		Assert.assertEquals(3,hospital.getServices().get(1).doctor.availablePermits() );
 		Assert.assertEquals(4,hospital.getServices().get(1).room.availablePermits() );
 	
-		p.leave();
+		p.leave(true);
 		/*the patient left the hospital*/
 		Assert.assertEquals(oldnbPatient,hospital.getService("Cardiology").getPatient() );
 	}
@@ -150,10 +152,14 @@ public class JUnitTest {
 		Assert.assertTrue(hospital.getServices().get(0).isGive());
 		
 		System.out.println("A patient is comming in Cardiology");
-		Patient p=new Patient(false,hospital.getService("Cardiology"));
+		Patient p=new Patient(true,hospital.getService("Cardiology"));
+		p.emergency();
 		/*A patient is here, then the service cannot give yet*/
 		Assert.assertFalse(hospital.getServices().get(0).isGive());
-		p.leave();
+		/*the patient finish the visit*/
+		new Room(hospital.getServices().get(0)).waitDoctor();
+		new Doctor(hospital.getServices().get(0)).examine();
+		p.leave(true);
 		
 		hospital.getServices().get(1).askDoctor(true);
 		/*Neurology ask a doctor, nobody gives then the number of doctor does nor change*/
@@ -164,6 +170,7 @@ public class JUnitTest {
 		hospital.getServices().get(0).okToGive();
 		
 		/*askDoctor is a thread and takes a little time to work when it can finally take one then we make the main thread sleep */ 
+		Thread.currentThread();
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
@@ -204,6 +211,7 @@ public class JUnitTest {
 		/*2 rooms are used*/
 		Assert.assertEquals(oldNbRoom, hospital.getServices().get(0).room.availablePermits()+2);
 		/*to let the time to askRoom to work*/
+		Thread.currentThread();
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
@@ -214,8 +222,8 @@ public class JUnitTest {
 		d.examine();
 		new Doctor(hospital.getServices().get(0)).examine();
 		
-		p.leave();
-		p2.leave();
+		p.leave(true);
+		p2.leave(true);
 		/*After that patient left the hospital Cardiology has one room in more*/
 		Assert.assertEquals(oldNbRoom, (hospital.getServices().get(0).room.availablePermits())-1);
 	}
@@ -233,8 +241,8 @@ public class JUnitTest {
 		p2.emergency();
 		new Room(hospital.getServices().get(2)).waitDoctor();
 		new Room(hospital.getServices().get(2)).waitDoctor();
-		/*There is 3 patient in more than before*/
-		Assert.assertEquals(oldNbPatient+3, hospital.getServices().get(2).getPatient());
+		/*There is 2 patient in more than before who did the check in*/
+		Assert.assertEquals(oldNbPatient+2, hospital.getServices().get(2).getPatient());
 		/*All rooms of the service are used*/
 		Assert.assertEquals(0, hospital.getServices().get(2).room.availablePermits());
 		/*The code use sempaphore, to show it we use a tryAcquire and not a acquire: to continue the test 
@@ -243,22 +251,67 @@ public class JUnitTest {
 		Assert.assertFalse( hospital.getServices().get(2).room.tryAcquire(1,500, TimeUnit.MILLISECONDS));
 		/*one patient finish*/
 		new Doctor(hospital.getServices().get(2)).examine();
-		p1.leave();
-		/*then only 2 patients are still here and one room is now free*/
-		Assert.assertEquals(oldNbPatient+2, hospital.getServices().get(2).getPatient());
+		p1.leave(true);
+		/*then only 1 patients are still here and one room is now free*/
+		Assert.assertEquals(oldNbPatient+1, hospital.getServices().get(2).getPatient());
 		Assert.assertEquals(1, hospital.getServices().get(2).room.availablePermits());
 		/*the 3rd patient can take it*/
 		p3.emergency();
 		new Room(hospital.getServices().get(2)).waitDoctor();
 		new Doctor(hospital.getServices().get(2)).examine();
 		new Doctor(hospital.getServices().get(2)).examine();
-		p2.leave();
-		p3.leave();
+		p2.leave(true);
+		p3.leave(true);
 		/*The 2 other patients finished
 		 * then the service get the same number of patient before those 3 came
 		 * the 2 rooms are now free
 		 */
 		Assert.assertEquals(oldNbPatient, hospital.getServices().get(2).getPatient());
 		Assert.assertEquals(2, hospital.getServices().get(2).room.availablePermits());
+	}
+	@Test 
+	public void hasToLeave()
+	{
+		hospital.getServices().get(2).okToGive();
+		hospital.getServices().get(1).askDoctor(true);
+		/*to let the time to askDoctor to work*/
+		Thread.currentThread();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		Assert.assertEquals(1, hospital.getServices().get(2).doctor.availablePermits());
+		/*only one doctor is in Rheumatology then we will have maximum 6 patient*/
+		Patient p1 = new Patient(true,hospital.getService("Rheumatology"));
+		Patient p2 = new Patient(false,hospital.getService("Rheumatology"));
+		Patient p3 = new Patient(false,hospital.getService("Rheumatology"));
+		Patient p4 = new Patient(false,hospital.getService("Rheumatology"));
+		Patient p5 = new Patient(false,hospital.getService("Rheumatology"));
+		Patient p6 = new Patient(false,hospital.getService("Rheumatology"));
+		Patient p7 = new Patient(false,hospital.getService("Rheumatology"));
+		
+		/*Doing their visit*/
+		p1.emergency();
+		p2.emergency();
+		new Room(hospital.getServices().get(2)).waitDoctor();
+		Assert.assertTrue(p3.goToEmergency());
+		Assert.assertTrue(p4.goToEmergency());
+		Assert.assertTrue(p5.goToEmergency());
+		Assert.assertTrue(p6.goToEmergency());
+		p2.fillPaper();
+		p4.fillPaper();
+		p5.fillPaper();
+		
+		Assert.assertEquals(6, hospital.getServices().get(2).getPatient());
+		
+		/*The next patient isn't accepted*/
+		Assert.assertTrue(p7.goToEmergency());
+		
+		new Doctor(hospital.getServices().get(2)).examine();
+		p1.leave(true);
+		
+		/*one left, now if he tries to come back he can*/
+		Assert.assertTrue(p7.goToEmergency());
 	}
 }

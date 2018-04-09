@@ -10,6 +10,9 @@ public class Service{
 	/*0= no need,1=need doctor, 2=need room, 3=both*/
 	private int need;
 	//private boolean available;
+	private int nbDoctor;
+	private int nbNurse;
+	private int nbRoom;
 	public Semaphore doctor;
 	public Semaphore nurse;
 	public Semaphore room;
@@ -22,6 +25,9 @@ public class Service{
 		
 		this.name=name;
 		//this.available=true;
+		this.nbDoctor=doctor;
+		this.nbNurse=nurse;
+		this.nbRoom=room;
 		this.doctor=new Semaphore(doctor, true);
 		this.nurse= new Semaphore(nurse, true);
 		this.room = new Semaphore(room, true);
@@ -31,25 +37,29 @@ public class Service{
 		this.patient=0;
 		System.out.println(name +" is ready");
 	}
-	
-	public void sendDoctor()
-	{
-		
-	}
-	public void sendRoom()
-	{
-		
-	}
-	
 	public boolean checkIn()
 	{
-		boolean enter=false;
+		boolean enter=true;
 		try {
 			this.reception.acquire();
-			int i=10;
-			
-			if(i<=100)
-				enter= true;
+			int busyNurse;
+			/*nurse and room can be used in the same time by one patient, we can take only the busiest*/
+			if(nbNurse<nbRoom)
+				busyNurse=nbNurse;
+			else
+				busyNurse=nbRoom;
+			int busyDoctor;
+			/*same with doctor and room*/
+			if(nbDoctor<nbRoom)
+				busyDoctor=nbDoctor;
+			else
+				busyDoctor=nbRoom;
+			/*Doctor and nurse can work simultaneously + patient has to fill paper: 3 tasks in the same time, patient/3
+			 * we give twice what they can as limits to know if they are too busy
+			 * then again/2
+			 * */
+			if((float)busyDoctor<(float)(patient/3)/2 || (float)busyNurse<(float)(patient/3)/2)
+				enter= false;
 			this.reception.release();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -159,6 +169,20 @@ public class Service{
 	}
 	
 	
+	public int getNbDoctor() {
+		return nbDoctor;
+	}
+	public void setNbDoctor(int nbDoctor) {
+		this.nbDoctor = nbDoctor;
+	}
+	public int getNbRoom() {
+		return nbRoom;
+	}
+	public void setNbRoom(int nbRoom) {
+		this.nbRoom = nbRoom;
+	}
+
+
 	private class askThread extends Thread{
 		private Service service;
 		private int resource;
@@ -184,7 +208,9 @@ public class Service{
 								System.out.println(giver.getName() +" gives a doctor to "+ service.name);
 								try {
 									giver.doctor.acquire();
+									giver.setNbDoctor(giver.getNbDoctor()-1);
 									service.doctor.release();
+									service.setNbDoctor(service.getNbDoctor()+1);
 									service.askDoctor(false);
 								}
 								catch (InterruptedException e) {
@@ -202,7 +228,9 @@ public class Service{
 								System.out.println(giver.getName() +" gives a room to "+ service.name);
 								try {
 									giver.room.acquire();
+									giver.setNbRoom(giver.getNbRoom()-1);
 									service.room.release();
+									service.setNbRoom(service.getNbRoom()+1);
 									service.askRoom(false);
 								}
 								catch (InterruptedException e) {

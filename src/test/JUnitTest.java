@@ -37,6 +37,57 @@ public class JUnitTest {
 	}
 	
 	@Test
+	public void serviceTest() throws InterruptedException{
+		/*
+		 * we test Service class
+		 * then one from hospital
+		 * we test that doctor, room, and nurse are all here
+		 */
+		Assert.assertEquals(5,hospital.getService("Cardiology").doctor.availablePermits());
+		Assert.assertEquals(5,hospital.getService("Cardiology").room.availablePermits());
+		Assert.assertEquals(5,hospital.getService("Cardiology").nurse.availablePermits());
+		hospital.getService("Cardiology").nurse.acquire();
+		hospital.getService("Cardiology").nurse.acquire();
+		/*2 nurse are now busy*/
+		Assert.assertEquals(5-2,hospital.getService("Cardiology").nurse.availablePermits());
+		/*one is released*/
+		hospital.getService("Cardiology").nurse.release();
+		Assert.assertEquals(5-1,hospital.getService("Cardiology").nurse.availablePermits());
+		
+		/*we check that one patient is here
+		 * and that we cannot give ressrouce after that
+		 */
+		hospital.getService("Cardiology").setPatient(1);
+		Assert.assertEquals(1,hospital.getService("Cardiology").getPatient());
+		Assert.assertFalse(hospital.getService("Cardiology").isGive());
+		
+		/*we check that a patient can come in*/
+		Assert.assertTrue(hospital.getService("Cardiology").checkIn());
+		
+		/*no patient
+		 * then can give*/
+		hospital.getService("Cardiology").setPatient(0);
+		Assert.assertEquals(0,hospital.getService("Cardiology").getPatient());
+		hospital.getService("Cardiology").okToGive();
+		Assert.assertTrue(hospital.getService("Cardiology").isGive());
+	}
+	
+	@Test
+	public void patientTest()
+	{
+		Patient p=new Patient(false,hospital.getService("Cardiology"));
+		/*check that it is not an emergency
+		 * and that he can go to the hospital
+		 * */
+		Assert.assertFalse(p.isEmergency());
+		Assert.assertTrue(p.goToEmergency());
+		
+		/*now it is an emergency*/
+		p=new Patient(true,hospital.getService("Cardiology"));
+		Assert.assertTrue(p.isEmergency());
+	}
+	
+	@Test
 	public void test() throws InterruptedException{
 		n= new Nurse(hospital.getServices().get(0));
 		r= new Room(hospital.getServices().get(0));
@@ -88,7 +139,7 @@ public class JUnitTest {
 		Assert.assertEquals(oldnbPatient,hospital.getService("Cardiology").getPatient() );
 	}
 	
-	/*@Test
+	@Test
 	public void realPatientTest()
 	{
 		//same test as before but all in a thread in patient
@@ -101,7 +152,7 @@ public class JUnitTest {
 			e.printStackTrace();
 		}
 		Assert.assertEquals(0,hospital.getService("Cardiology").getPatient() );
-	}*/
+	}
 	
 	@Test 
 	public void emergencyTest() throws InterruptedException
@@ -306,7 +357,7 @@ public class JUnitTest {
 		Assert.assertEquals(6, hospital.getServices().get(2).getPatient());
 		
 		/*The next patient isn't accepted*/
-		Assert.assertTrue(p7.goToEmergency());
+		Assert.assertFalse(p7.goToEmergency());
 		
 		new Doctor(hospital.getServices().get(2)).examine();
 		p1.leave(true);

@@ -95,5 +95,9 @@ public class Patient implements Runnable{
 	public Service getService() {
 		return service;
 	}
+
+	public boolean isEmergency() {
+		return emergency;
+	}
 	
 }

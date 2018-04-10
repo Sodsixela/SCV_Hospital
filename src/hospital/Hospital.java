@@ -10,41 +10,18 @@ public class Hospital {
 	{
 		services= new ArrayList<>();
 		openService= new Semaphore(0,true);
-		//services.add(new Service("Cardiology",5,5,5));
-		/*addService(new Service("Cardiology",5,5,5));
-		addService(new Service("Neurology",3,4,4));
-		addService(new Service("Rheumatology",2,3,2));
-		*/
-		
-		/*System.out.println(openService.availablePermits());
-		openService.release();
-		System.out.println(openService.availablePermits());
-		try {
-			openService.acquire();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		boolean test=false;
+		if(test)
+		{
+			addService(new Service("Cardiology",5,5,5,this));
+			addService(new Service("Neurology",3,4,4,this));
+			addService(new Service("Rheumatology",2,3,2,this));
+			
+			new Thread(new Patient(false,getService("Cardiology"))).start();
+			new Thread(new Patient(false,services.get(1))).start();
+			new Thread(new Patient(false,services.get(1))).start();
+			new Thread(new Patient(false,services.get(0))).start();
 		}
-		System.out.println(openService.availablePermits());*/
-		//new Thread(new Patient(false,"Cardiology")).start();
-		
-		//services.get(0).askDoctor(true);
-		
-		/*new Thread(new Patient(false,getService("Cardiology"))).start();
-		/*new Thread(new Patient(false,services.get(0))).start();
-		new Thread(new Patient(false,services.get(0))).start();
-		new Thread(new Patient(false,services.get(0))).start();
-		new Thread(new Patient(true,services.get(0))).start();
-		new Thread(new Patient(false,services.get(0))).start();
-		new Thread(new Patient(false,services.get(1))).start();*/
-		/*Thread.currentThread();
-		try {
-			Thread.sleep(15000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		services.get(1).okToGive();*/
-		//while(true);
 	}
 	public Service getService(String nameService) {
 		for(Service service: services)

@@ -58,7 +58,7 @@ public class Service{
 			 * we give twice what they can as limits to know if they are too busy
 			 * then again/2
 			 * */
-			if((float)busyDoctor<(float)(patient/3)/2 || (float)busyNurse<(float)(patient/3)/2)
+			if((float)busyDoctor<=(float)(patient/3)/2 || (float)busyNurse<=(float)(patient/3)/2)
 				enter= false;
 			this.reception.release();
 		} catch (InterruptedException e) {
